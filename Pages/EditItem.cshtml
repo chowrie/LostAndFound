@@ -1,0 +1,42 @@
+﻿@page
+@model EditItemModel
+@{
+    ViewData["Title"] = "认领状态修改";
+}
+
+<h2>完成登记</h2>
+
+<form method="post">
+    <input type="hidden" asp-for="Item.Id" />
+    <div class="form-group">
+        <label asp-for="Item.Name"></label>
+        <input asp-for="Item.Name" class="form-control" readonly />
+    </div>
+    <div class="form-group">
+        <label asp-for="Item.PickUpDate"></label>
+        <input asp-for="Item.PickUpDate" class="form-control" type="date" readonly />
+    </div>
+    <div class="form-group">
+        <label asp-for="Item.Location"></label>
+        <input asp-for="Item.Location" class="form-control" readonly />
+    </div>
+    <div class="form-group">
+        <label asp-for="Item.ClaimerEmail"></label>
+        <input asp-for="Item.ClaimerEmail" class="form-control" placeholder="请输入认领人邮箱" />
+        <span asp-validation-for="Item.ClaimerEmail" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Item.IsClaimed"></label>
+        <select asp-for="Item.IsClaimed" class="form-control">
+            <option value="false">未认领</option>
+            <option value="true">已认领</option>
+        </select>
+        <span asp-validation-for="Item.IsClaimed" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-success">提交</button>
+    <a asp-page="/MyItems" class="btn btn-secondary">取消</a>
+</form>
+
+@section Scripts {
+        <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,96 @@
+﻿@model PaginationViewModel
+
+@{
+    var currentPage = Model.CurrentPage;
+    var totalPages = Model.TotalPages;
+    var pageName = Model.PageName;
+    var searchTerm = Model.SearchTerm;
+}
+
+@if (totalPages > 1)
+{
+        <nav aria-label="Page navigation">
+            <ul class="pagination">
+
+                @* Previous *@
+                @if (currentPage > 1)
+                {
+                        <li class="page-item">
+                            <a class="page-link" asp-page="@pageName" asp-route-CurrentPage="@(currentPage - 1)" asp-route-SearchTerm="@searchTerm" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                        </li>
+                }
+
+                @* Pages *@
+                @if (totalPages <= 5)
+                {
+                        @for (int i = 1; i <= totalPages; i++)
+                        {
+                                <li class="page-item @(i == currentPage ? "active" : "")">
+                                    <a class="page-link" asp-page="@pageName" asp-route-CurrentPage="@i" asp-route-SearchTerm="@searchTerm">@i</a>
+                                </li>
+                        }
+                }
+                else
+                {
+                        if (currentPage <= 3)
+                        {
+                                for (int i = 1; i <= 5; i++)
+                                {
+                                        <li class="page-item @(i == currentPage ? "active" : "")">
+                                            <a class="page-link" asp-page="@pageName" asp-route-CurrentPage="@i" asp-route-SearchTerm="@searchTerm">@i</a>
+                                        </li>
+                                }
+                                <li class="page-item disabled"><span class="page-link">...</span></li>
+                                <li class="page-item">
+                                    <a class="page-link" asp-page="@pageName" asp-route-CurrentPage="@totalPages" asp-route-SearchTerm="@searchTerm">@totalPages</a>
+                                </li>
+                        }
+                        else if (currentPage >= totalPages - 2)
+                        {
+                                <li class="page-item">
+                                    <a class="page-link" asp-page="@pageName" asp-route-CurrentPage="1" asp-route-SearchTerm="@searchTerm">1</a>
+                                </li>
+                                <li class="page-item disabled"><span class="page-link">...</span></li>
+                                for (int i = totalPages - 4; i <= totalPages; i++)
+                                {
+                                        <li class="page-item @(i == currentPage ? "active" : "")">
+                                            <a class="page-link" asp-page="@pageName" asp-route-CurrentPage="@i" asp-route-SearchTerm="@searchTerm">@i</a>
+                                        </li>
+                                }
+                        }
+                        else
+                        {
+                                <li class="page-item">
+                                    <a class="page-link" asp-page="@pageName" asp-route-CurrentPage="1" asp-route-SearchTerm="@searchTerm">1</a>
+                                </li>
+                                <li class="page-item disabled"><span class="page-link">...</span></li>
+                                for (int i = currentPage - 2; i <= currentPage + 2; i++)
+                                {
+                                        <li class="page-item @(i == currentPage ? "active" : "")">
+                                            <a class="page-link" asp-page="@pageName" asp-route-CurrentPage="@i" asp-route-SearchTerm="@searchTerm">@i</a>
+                                        </li>
+                                }
+                                <li class="page-item disabled"><span class="page-link">...</span></li>
+                                <li class="page-item">
+                                    <a class="page-link" asp-page="@pageName" asp-route-CurrentPage="@totalPages" asp-route-SearchTerm="@searchTerm">@totalPages</a>
+                                </li>
+                        }
+                }
+
+                @* Next *@
+                @if (currentPage < totalPages)
+                {
+                        <li class="page-item">
+                            <a class="page-link" asp-page="@pageName" asp-route-CurrentPage="@(currentPage + 1)" asp-route-SearchTerm="@searchTerm" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                                <span class="sr-only">Next</span>
+                            </a>
+                        </li>
+                }
+
+            </ul>
+        </nav>
+}

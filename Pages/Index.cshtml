@@ -1,0 +1,41 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "首页";
+}
+
+
+<div>
+    @foreach (var item in Model.Items)
+    {
+            <div class="item">
+                <h3>
+
+                    <a asp-page="/ItemDetails" asp-route-id="@item.Id">@item.Name</a>
+                </h3>
+                <p>@item.Description</p>
+                <p>
+                    <strong>拾取时间:</strong> @item.PickUpDate.ToString("yyyy-MM-dd")
+                    &nbsp;&nbsp;
+                    <strong>地点:</strong> @item.Location
+                </p>
+                <p>
+                    状态: <span class="claim-status @(item.IsClaimed ? "claimed" : "unclaimed")">@(item.IsClaimed ? "已认领" : "未认领")</span>
+                </p>
+            </div>
+            <hr />
+    }
+
+    @if (!Model.Items.Any())
+    {
+            <p class="text-muted">暂无失物信息。</p>
+    }
+</div>
+
+@await Html.PartialAsync("_Pagination", new PaginationViewModel
+{
+    CurrentPage = Model.CurrentPage,
+    TotalPages = Model.TotalPages,
+    SearchTerm = Model.SearchTerm,
+    PageName = "/Index"
+})
