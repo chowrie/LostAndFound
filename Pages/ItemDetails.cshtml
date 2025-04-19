@@ -1,0 +1,55 @@
+﻿@page "{id:int}"
+@model ItemDetailsModel
+
+@{
+    ViewData["Title"] = "失物详情";
+}
+
+<h1>@Model.Item.Name</h1>
+
+<p>
+    <strong>拾取时间:</strong> @Model.Item.PickUpDate.ToString("yyyy-MM-dd") <br />
+    <strong>拾取地点:</strong> @Model.Item.Location <br />
+    <strong>描述:</strong> @Model.Item.Description <br />
+    <strong>状态:</strong> @(Model.Item.IsClaimed ? "已认领" : "未认领") <br />
+</p>
+
+@*  图片展示区域  *@
+<p>
+    <strong>物品图片：</strong><br />
+    @if (Model.Item.ImageUrlList.Any())
+    {
+            <div class="image-gallery">
+                @foreach (var url in Model.Item.ImageUrlList)
+                {
+                        <img src="@url" 
+                             alt="物品图片" 
+                             style="max-width:200px;max-height:200px;margin:5px;border:1px solid #ccc;" />
+                }
+            </div>
+    }
+    else
+    {
+            <span>暂无图片</span>
+    }
+</p>
+
+@if (!Model.Item.IsClaimed && Model.UserEmail != Model.Item.RegistererEmail)
+{
+        <form method="post">
+            <button type="submit" asp-page-handler="Claim">我想认领</button>
+        </form>
+
+    @if (TempData["Message"] != null)
+    {
+                <div class="alert alert-success">@TempData["Message"]</div>
+    }
+}
+else if (Model.Item.IsClaimed)
+{
+        <p><em>该物品已被认领</em></p>
+}
+else
+{
+        <p><em>这是您登记的物品</em></p>
+}

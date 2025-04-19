@@ -1,0 +1,38 @@
+﻿@page
+@model LostAndFound.Pages.LoginModel
+@{
+    ViewData["Title"] = "登录";
+}
+
+<div class="container mt-4">
+  <h1>登录</h1>
+
+  @if (ViewData["Message"] != null)
+  {
+          <div class="alert alert-success">@ViewData["Message"]</div>
+  }
+
+  <form method="post">
+    <div>
+      <label asp-for="Email"></label>
+      <input asp-for="Email" />
+      <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+
+    <div>
+      <label asp-for="VerificationCode"></label>
+      <input asp-for="VerificationCode" />
+      <button type="submit" asp-page-handler="SendCode">发送验证码</button>
+    </div>
+
+    <div class="d-flex align-items-center">
+      <button type="submit" asp-page-handler="VerifyCode">验证</button>
+      <span asp-validation-for="VerificationCode" class="text-danger ms-2"></span>
+
+      @if (!ViewData.ModelState.IsValid && ViewData.ModelState[""] != null && ViewData.ModelState[""].Errors.Any())
+      {
+            <span class="text-danger ms-2">@ViewData.ModelState[""].Errors.First().ErrorMessage</span>
+      }
+    </div>
+  </form>
+</div>

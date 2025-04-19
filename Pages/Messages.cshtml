@@ -1,0 +1,27 @@
+﻿@page
+@model LostAndFound.Pages.MessagesModel
+@{
+    ViewData["Title"] = "我的消息";
+}
+
+<h2>我的消息</h2>
+
+@if (Model.Messages.Any())
+{
+      <ul class="list-group">
+        @foreach (var msg in Model.Messages)
+        {
+              <li class="list-group-item">
+                <strong>@msg.SenderEmail</strong> 于 @msg.Timestamp<br />
+                认领物品：<a asp-page="/ItemDetails" asp-route-id="@msg.ItemId">@msg.Item?.Name</a><br />
+              </li>
+        }
+      </ul>
+
+      <!-- 调用同一个分页 Partial -->
+    @await Html.PartialAsync("_Pagination", Model.Pager)
+}
+else
+{
+      <p class="text-muted">暂无消息。</p>
+}

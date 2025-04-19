@@ -1,0 +1,66 @@
+﻿@inject AppDbContext _db   
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>@ViewData["Title"] - LostAndFound</title>
+  <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+  <header>
+    <nav class="navbar navbar-expand-sm navbar-light bg-light border-bottom mb-3">
+      <div class="container">
+        <a class="navbar-brand" asp-page="/Index">失物招领</a>
+        @if (!string.IsNullOrEmpty(Context.Session.GetString("Email")))
+        {
+          <!-- 搜索框 -->
+          <form class="d-flex" method="get" asp-page="/Index">
+                    <input class="form-control me-2" name="SearchTerm" placeholder="搜索..." value="@ViewData["SearchTerm"]" />
+                    <button class="btn btn-outline-success" type="submit" style="min-width: 80px;">搜索</button>
+
+          </form>
+
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link" asp-page="/RegisterItem">登记失物</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" asp-page="/MyItems">我的登记</a>
+            </li>
+            <li class="nav-item position-relative">
+              @{
+                  var email = Context.Session.GetString("Email");
+                  int unreadCount = _db.Messages
+                      .Count(m => m.ReceiverEmail == email && !m.IsRead);
+              }
+              <a class="nav-link" asp-page="/Messages">
+                我的消息
+                @if (unreadCount > 0)
+                {
+                  <span class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle">
+                    <span class="visually-hidden">Unread messages</span>
+                  </span>
+                }
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-danger" asp-page="/Logout">退出</a>
+            </li>
+          </ul>
+        }
+      </div>
+    </nav>
+  </header>
+
+  <div class="container">
+    <main role="main" class="pb-3">
+      @RenderBody()
+    </main>
+  </div>
+
+  <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+  @RenderSection("Scripts", required: false)
+</body>
+</html>
